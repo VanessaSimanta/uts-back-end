@@ -1,11 +1,14 @@
+const { has } = require('lodash');
 const { User } = require('../../../models');
 
 /**
  * Get a list of users
  * @returns {Promise}
  */
-async function getUsers() {
-  return User.find({});
+async function getUsers(pageNumber, pageSize) {
+  return User.find()
+    .skip((pageNumber - 1) * pageSize)
+    .limit(pageSize);
 }
 
 /**

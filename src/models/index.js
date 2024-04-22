@@ -6,6 +6,11 @@ const usersSchema = require('./users-schema');
 
 mongoose.connect(`${config.database.connection}/${config.database.name}`, {
   useNewUrlParser: true,
+  writeConcern: {
+    w: 'majority',
+    j: true,
+    wtimeout: 1000,
+  },
 });
 
 const db = mongoose.connection;
