@@ -8,9 +8,18 @@ const authenticationServices = require('./authentication-service');
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
+
+//inisialisasi variabel
 let counterLoginAttempt = 0;
+
+function resetCounter() {
+  counterLoginAttempt = 0;
+  return counterLoginAttempt;
+}
+
 async function login(request, response, next) {
   const { email, password } = request.body;
+  const delayTime = 1800000;
 
   try {
     // Check login credentials
@@ -21,7 +30,7 @@ async function login(request, response, next) {
 
     //jika login attempt lebih dari 5x maka timeout dan error
     if (counterLoginAttempt == 5) {
-      setTimeout(authenticationServices.checkLoginCredentials, 1800000);
+      setTimeout(resetCounter, delayTime);
       throw errorResponder(
         errorTypes.FORBIDDEN,
         'Too many failed login attempts'
@@ -38,7 +47,7 @@ async function login(request, response, next) {
 
     //saat login success counter reset ke 0
     if (loginSuccess) {
-      counterLoginAttempt = 0;
+      resetCounter();
     }
 
     return response.status(200).json(loginSuccess);
