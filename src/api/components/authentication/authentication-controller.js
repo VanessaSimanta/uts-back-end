@@ -8,6 +8,7 @@ const authenticationServices = require('./authentication-service');
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
+let counterLoginAttempt = 0;
 async function login(request, response, next) {
   const { email, password } = request.body;
 
@@ -18,11 +19,26 @@ async function login(request, response, next) {
       password
     );
 
+    //jika login attempt lebih dari 5x maka timeout dan error
+    if (counterLoginAttempt == 5) {
+      setTimeout(authenticationServices.checkLoginCredentials, 1800000);
+      throw errorResponder(
+        errorTypes.FORBIDDEN,
+        'Too many failed login attempts'
+      );
+    }
+
     if (!loginSuccess) {
+      counterLoginAttempt += 1;
       throw errorResponder(
         errorTypes.INVALID_CREDENTIALS,
         'Wrong email or password'
       );
+    }
+
+    //saat login success counter reset ke 0
+    if (loginSuccess) {
+      counterLoginAttempt = 0;
     }
 
     return response.status(200).json(loginSuccess);
