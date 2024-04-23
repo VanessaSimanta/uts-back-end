@@ -5,9 +5,55 @@ const { hashPassword, passwordMatched } = require('../../../utils/password');
  * Get list of users
  * @returns {Array}
  */
-async function getUsers(pageNumber, pageSize) {
-  const users = await usersRepository.getUsers(pageNumber, pageSize);
-  return users;
+async function getUsers(pageNumber, pageSize, searching, sorting) {
+  const hasilPagination = {};
+  const batasAwal = (pageNumber - 1) * pageSize;
+  const batasAkhir = pageNumber * pageSize;
+  const apaAja = await usersRepository.TotalData();
+  const Count = apaAja.length;
+
+  //menampilkan hasil
+  hasilPagination.page_number = {
+    pageNumber,
+  };
+
+  hasilPagination.page_size = {
+    pageSize,
+  };
+
+  hasilPagination.count = {
+    Count,
+  };
+
+  //untuk cek ada previous page atau tidak
+  if (batasAwal == 0 || pageNumber == 0) {
+    hasilPagination.has_previous_page = {
+      has_previous_page: false,
+    };
+  } else {
+    hasilPagination.has_previous_page = {
+      has_previous_page: true,
+    };
+  }
+
+  //untuk cek ada next page atau tidak
+  if (batasAkhir > Count || pageNumber == 0) {
+    hasilPagination.has_next_page = {
+      has_next_page: false,
+    };
+  } else {
+    hasilPagination.has_next_page = {
+      has_next_page: true,
+    };
+  }
+
+  hasilPagination.data = await usersRepository.getUsers(
+    batasAwal,
+    pageSize,
+    searching,
+    sorting
+  );
+  return hasilPagination;
 }
 
 /**
