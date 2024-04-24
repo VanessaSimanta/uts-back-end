@@ -4,7 +4,6 @@ const { Bank } = require('../../../models');
  * Get a list of users
  * @returns {Promise}
  */
-
 async function getData() {
   return Bank.find({});
 }
@@ -23,14 +22,14 @@ async function createPocket(
   ownerName,
   pocketName,
   moneyAmmount,
-  hashedPin
+  PIN
 ) {
   return Bank.create({
     pocketNo,
     ownerName,
     pocketName,
     moneyAmmount,
-    hashedPin,
+    PIN,
   });
 }
 
@@ -47,8 +46,16 @@ async function pocketNoUnique(pocketNo) {
   return false;
 }
 
+async function updateMoney(pocketNo, money) {
+  return Bank.updateOne(
+    { pocketNo: pocketNo },
+    { $set: { moneyAmmount: money } }
+  );
+}
+
 module.exports = {
   getData,
   createPocket,
   pocketNoUnique,
+  updateMoney,
 };

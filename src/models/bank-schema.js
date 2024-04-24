@@ -4,7 +4,7 @@ const bankSchema = {
   ownerName: String,
   pocketName: String,
   moneyAmmount: String,
-  pin: String,
+  PIN: String,
 };
 
 module.exports = bankSchema;

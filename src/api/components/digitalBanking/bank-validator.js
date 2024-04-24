@@ -1,3 +1,4 @@
+const { param } = require('express/lib/router');
 const joi = require('joi');
 
 module.exports = {
@@ -14,6 +15,19 @@ module.exports = {
         .label('MoneyAmmount'),
       PIN: joi.string().min(6).max(6).required().label('PIN'),
       confirmPin: joi.string().min(6).max(6).required().label('confirmPIN'),
+    },
+  },
+  updatePocket: {
+    params: {
+      pocketNo: joi.string().min(12).max(12).required().label('PocketNo'),
+    },
+    body: {
+      moneyAmmount: joi
+        .string()
+        .min(1)
+        .max(20)
+        .required()
+        .label('MoneyAmmount'),
     },
   },
 };

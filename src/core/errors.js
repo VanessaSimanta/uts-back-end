@@ -129,10 +129,10 @@ const errorTypes = {
     status: 409,
     code: 'EMAIL_ALREADY_TAKEN_ERROR',
   },
-  POCKETNO_ALREADY_EXIST: {
-    description: 'This pocketNo is already exist, try another one',
+  POCKETNO_DOESNT_EXIST: {
+    description: 'This pocketNo doesnt exist, try another one',
     status: 409,
-    code: 'POCKETNO_ALREADY_EXIST_ERROR',
+    code: 'POCKETNO_DOESNT_EXIST_ERROR',
   },
   SEND_EMAIL: {
     description: 'Send email error',

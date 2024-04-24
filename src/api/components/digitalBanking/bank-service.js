@@ -1,6 +1,5 @@
 const bankRepository = require('./bank-repository');
-const { hashPassword, passwordMatched } = require('../../../utils/password');
-const { ownerName, pocketNo } = require('../../../models/bank-schema');
+const { hashPassword } = require('../../../utils/password');
 
 /**
  * mendapatkan semua data
@@ -29,7 +28,7 @@ async function getData() {
  */
 async function pocketNoUnique(pocketNo) {
   const unique = await bankRepository.pocketNoUnique(pocketNo);
-  if (unique) {
+  if (unique == true) {
     return true;
   }
 
@@ -69,8 +68,26 @@ async function createPocket(
   return true;
 }
 
+/**
+ * untuk mengupdate nominal uang
+ * @param {string} pocketNo - nomor pocket
+ * @param {string} money - data uang baru
+ * @returns {boolean}
+ */
+async function updateMoney(pocketNo, money) {
+  //update money
+  try {
+    await bankRepository.updateMoney(pocketNo, money);
+  } catch (err) {
+    return null;
+  }
+
+  return true;
+}
+
 module.exports = {
   getData,
   createPocket,
   pocketNoUnique,
+  updateMoney,
 };
