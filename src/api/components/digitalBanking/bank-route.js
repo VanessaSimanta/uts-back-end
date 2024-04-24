@@ -9,9 +9,9 @@ module.exports = (app) => {
   app.use('/bank', route);
 
   //menampilkan seluruh data
-  route.get('/data', bankControllers.getData);
+  route.get('/data', bankControllers.getAllData);
 
-  //membuat pocket baru
+  //jika user membuat pocket baru
   route.post(
     '/create',
     celebrate(BankValidator.createPocket),
@@ -23,5 +23,12 @@ module.exports = (app) => {
     '/:pocketNo/moneyAmmount',
     celebrate(BankValidator.updatePocket),
     bankControllers.updateMoney
+  );
+
+  //jika user mendelete pocket
+  route.delete(
+    '/:pocketNo/deletePocket',
+    celebrate(BankValidator.deletePocket),
+    bankControllers.deletePocket
   );
 };

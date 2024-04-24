@@ -4,7 +4,7 @@ const { Bank } = require('../../../models');
  * Get a list of users
  * @returns {Promise}
  */
-async function getData() {
+async function getAllData() {
   return Bank.find({});
 }
 
@@ -12,22 +12,28 @@ async function getData() {
  * membuat pocket baru
  * @param {string} pocketNo - nomor pocket
  * @param {string} ownerName - pemiliki pocket
+ * @param {string} otherOwner - pemilik poket selain main owner
  * @param {string} pocketName - nama pocket
+ * @param {string} pocketType - jenis pocket (personal /shared)
  * @param {string} moneyAmmount - jumlah uang di pocket
  * @param {string} PIN - pin
- * @returns {boolean}
+ * @returns {Promise}
  */
 async function createPocket(
   pocketNo,
   ownerName,
+  otherOwner,
   pocketName,
+  pocketType,
   moneyAmmount,
   PIN
 ) {
   return Bank.create({
     pocketNo,
     ownerName,
+    otherOwner,
     pocketName,
+    pocketType,
     moneyAmmount,
     PIN,
   });
@@ -39,13 +45,21 @@ async function createPocket(
  * @returns {boolean}
  */
 async function pocketNoUnique(pocketNo) {
-  const data = await Bank.find({ pocketNo: pocketNo });
-  if (data.length > 0) {
+  const Unik = await Bank.find({ pocketNo: pocketNo });
+
+  if (Unik.length > 0) {
     return true;
   }
+
   return false;
 }
 
+/**
+ * Untuk update moneyAmmount
+ * @param {string} pocketNo - nomor pocket
+ * @param {string} money - moneyAmmount baru
+ * @returns {Promise}
+ */
 async function updateMoney(pocketNo, money) {
   return Bank.updateOne(
     { pocketNo: pocketNo },
@@ -53,9 +67,19 @@ async function updateMoney(pocketNo, money) {
   );
 }
 
+/**
+ * Untuk delete pocket
+ * @param {string} pocketNo - nomor pocket
+ * @returns {Promise}
+ */
+async function deletePocket(pocketNo) {
+  return Bank.deleteOne({ pocketNo: pocketNo });
+}
+
 module.exports = {
-  getData,
+  getAllData,
   createPocket,
   pocketNoUnique,
   updateMoney,
+  deletePocket,
 };
