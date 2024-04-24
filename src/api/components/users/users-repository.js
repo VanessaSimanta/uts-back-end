@@ -1,7 +1,5 @@
-const { has } = require('lodash');
+const { split, first, last } = require('lodash');
 const { User } = require('../../../models');
-const { password } = require('../../../models/users-schema');
-
 /**
  * Get a list of users
  * @returns {Promise}
@@ -12,8 +10,24 @@ async function TotalData() {
 }
 
 async function getUsers(awal, pageSize, searching, sorting) {
-  return User.find()
-    .sort(sorting)
+  //saat search
+  const dataSearch = split(searching, ':'); //untuk memecah data
+  const dataSatuSearch = first(dataSearch); //field
+  const dataDuaSearch = last(dataSearch); //substring
+
+  //saat sort
+  const dataSort = split(sorting, ':');
+  const dataSatuSort = first(dataSort);
+  const dataDuaSort = last(dataSort);
+  let ascdesc = 1;
+  if (dataDuaSort == 'desc') {
+    ascdesc = -1;
+  }
+
+  return User.find({
+    [dataSatuSearch]: { $regex: `\\b${dataDuaSearch}\\b`, $options: 'i' },
+  })
+    .sort({ [dataSatuSort]: ascdesc })
     .skip(awal)
     .limit(pageSize)
     .select('-password');
