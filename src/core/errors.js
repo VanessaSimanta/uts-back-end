@@ -72,6 +72,11 @@ const errorTypes = {
     status: 403,
     code: 'INVALID_PASSWORD_ERROR',
   },
+  INVALID_PIN: {
+    description: 'Invalid pin',
+    status: 403,
+    code: 'INVALID_PIN_ERROR',
+  },
   TOKEN_EXPIRED: {
     description: 'Token expired',
     status: 419,
@@ -123,6 +128,11 @@ const errorTypes = {
     description: 'This email already taken, try use another',
     status: 409,
     code: 'EMAIL_ALREADY_TAKEN_ERROR',
+  },
+  POCKETNO_ALREADY_EXIST: {
+    description: 'This pocketNo is already exist, try another one',
+    status: 409,
+    code: 'POCKETNO_ALREADY_EXIST_ERROR',
   },
   SEND_EMAIL: {
     description: 'Send email error',
