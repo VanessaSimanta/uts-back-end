@@ -1,7 +1,7 @@
 const joi = require('joi');
 
 module.exports = {
-  createNewPocket: {
+  createPocket: {
     body: {
       pocketNo: joi.string().min(12).max(12).required().label('PocketNo'),
       ownerName: joi.string().min(1).max(150).required().label('OwnerName'),
