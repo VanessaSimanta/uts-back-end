@@ -8,11 +8,11 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  * @param {object} next - Express route middlewares
  * @returns {object} Res object or pass an error to the next route
  */
-async function getAllData(req, res, next) {
+async function getAllBankData(req, res, next) {
   try {
-    const semuaData = await bankService.getAllData();
+    const semuaDataBank = await bankService.getAllBankData();
 
-    return res.status(200).json(semuaData);
+    return res.status(200).json(semuaDataBank);
   } catch (err) {
     return next(err);
   }
@@ -25,7 +25,7 @@ async function getAllData(req, res, next) {
  * @param {object} next - Express route middlewares
  * @returns {object} Res object or pass an error to the next route
  */
-async function createPocket(req, res, next) {
+async function createNewPocket(req, res, next) {
   try {
     const pocketNo = req.body.pocketNo;
     const ownerName = req.body.ownerName;
@@ -53,7 +53,7 @@ async function createPocket(req, res, next) {
       );
     }
 
-    const berhasilCreatePocket = await bankService.createPocket(
+    const berhasilcreateNewPocket = await bankService.createNewPocket(
       pocketNo,
       ownerName,
       otherOwner,
@@ -64,7 +64,7 @@ async function createPocket(req, res, next) {
     );
 
     //jika gagal maka keluarkan error
-    if (berhasilCreatePocket != true) {
+    if (berhasilcreateNewPocket != true) {
       throw errorResponder(
         errorTypes.UNPROCESSABLE_ENTITY,
         'Gagal untuk create pocket silahkan coba kembali !'
@@ -151,8 +151,8 @@ async function deletePocket(req, res, next) {
 }
 
 module.exports = {
-  getAllData,
-  createPocket,
+  getAllBankData,
+  createNewPocket,
   updateMoney,
   deletePocket,
 };

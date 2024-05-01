@@ -9,13 +9,13 @@ module.exports = (app) => {
   app.use('/bank', route);
 
   //menampilkan seluruh data
-  route.get('/data', bankControllers.getAllData);
+  route.get('/data', bankControllers.getAllBankData);
 
   //jika user membuat pocket baru
   route.post(
     '/create',
-    celebrate(BankValidator.createPocket),
-    bankControllers.createPocket
+    celebrate(BankValidator.createNewPocket),
+    bankControllers.createNewPocket
   );
 
   //update jika ada penambahan atau pengurangan uang

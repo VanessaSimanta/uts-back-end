@@ -4,7 +4,7 @@ const { Bank } = require('../../../models');
  * Get a list of users
  * @returns {Promise}
  */
-async function getAllData() {
+async function getAllBankData() {
   return Bank.find({});
 }
 
@@ -19,7 +19,7 @@ async function getAllData() {
  * @param {string} PIN - pin
  * @returns {Promise}
  */
-async function createPocket(
+async function createNewPocket(
   pocketNo,
   ownerName,
   otherOwner,
@@ -77,8 +77,8 @@ async function deletePocket(pocketNo) {
 }
 
 module.exports = {
-  getAllData,
-  createPocket,
+  getAllBankData,
+  createNewPocket,
   pocketNoUnique,
   updateMoney,
   deletePocket,

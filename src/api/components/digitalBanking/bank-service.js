@@ -5,8 +5,8 @@ const { hashPassword } = require('../../../utils/password');
  * mendapatkan semua data kecuali pin untuk menjaga keamanan user
  * @returns {Array}
  */
-async function getAllData() {
-  const SemuaData = await bankRepository.getAllData();
+async function getAllBankData() {
+  const SemuaData = await bankRepository.getAllBankData();
   const hasilData = [];
   for (let i = 0; i < SemuaData.length; i += 1) {
     const Bank = SemuaData[i];
@@ -49,7 +49,7 @@ async function pocketNoUnique(pocketNo) {
  * @param {string} PIN - pin
  * @returns {boolean}
  */
-async function createPocket(
+async function createNewPocket(
   pocketNo,
   ownerName,
   otherOwner,
@@ -62,7 +62,7 @@ async function createPocket(
   const hashedPin = await hashPassword(PIN);
 
   try {
-    await bankRepository.createPocket(
+    await bankRepository.createNewPocket(
       pocketNo,
       ownerName,
       otherOwner,
@@ -111,8 +111,8 @@ async function deletePocket(pocketNo) {
 }
 
 module.exports = {
-  getAllData,
-  createPocket,
+  getAllBankData,
+  createNewPocket,
   pocketNoUnique,
   updateMoney,
   deletePocket,
