@@ -1,5 +1,6 @@
 const usersRepository = require('./users-repository');
 const { hashPassword, passwordMatched } = require('../../../utils/password');
+const { divide } = require('lodash');
 
 /**
  * Get list of users
@@ -11,6 +12,8 @@ async function getUsers(pageNumber, pageSize, searching, sorting) {
   const batasAkhir = pageNumber * pageSize;
   const apaAja = await usersRepository.TotalData();
   const Count = apaAja.length;
+  let itung = Math.ceil(Count / pageSize);
+  const semuaPages = itung;
 
   //menampilkan hasil
   hasilPagination.page_number = {
@@ -23,6 +26,10 @@ async function getUsers(pageNumber, pageSize, searching, sorting) {
 
   hasilPagination.count = {
     Count,
+  };
+
+  hasilPagination.totalHal = {
+    semuaPages,
   };
 
   //untuk cek ada previous page atau tidak
@@ -53,7 +60,17 @@ async function getUsers(pageNumber, pageSize, searching, sorting) {
     searching,
     sorting
   );
-  return hasilPagination;
+
+  let hasilPalingAkhir = {
+    'Page_number ': hasilPagination.page_number.pageNumber,
+    'Page_size': hasilPagination.page_size.pageSize,
+    'Count': hasilPagination.count.Count,
+    'Total_pages': hasilPagination.totalHal.semuaPages,
+    'Has_previous_pages': hasilPagination.has_previous_page.has_previous_page,
+    'Has_next_pages': hasilPagination.has_next_page.has_next_page,
+    'Data': hasilPagination.data,
+  };
+  return hasilPalingAkhir;
 }
 
 /**
