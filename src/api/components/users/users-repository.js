@@ -1,14 +1,21 @@
 const { split, first, last } = require('lodash');
 const { User } = require('../../../models');
+
 /**
  * Get a list of users
  * @returns {Promise}
  */
-
 async function TotalData() {
   return User.find({});
 }
 
+/**
+ * Get user dengan pagination dan filtering
+ * @param {integer} awal - batas awal untuk pagination
+ * @param {integer} pageSize - tiap page ada berapa data
+ * @param {String} searching - data yang ingin dicari di databasse
+ * @param {String} sorting - menentukan urutan data asc /desc
+ */
 async function getUsers(awal, pageSize, searching, sorting) {
   //saat search
   const dataSearch = split(searching, ':'); //untuk memecah data
@@ -19,18 +26,26 @@ async function getUsers(awal, pageSize, searching, sorting) {
   const dataSort = split(sorting, ':');
   const dataSatuSort = first(dataSort);
   const dataDuaSort = last(dataSort);
+
+  //menentukkan asscending descending
   let ascdesc = 1;
   if (dataDuaSort == 'desc') {
     ascdesc = -1;
   }
 
-  return User.find({
-    [dataSatuSearch]: { $regex: `\\b${dataDuaSearch}\\b`, $options: 'i' },
-  })
-    .sort({ [dataSatuSort]: ascdesc })
-    .skip(awal)
-    .limit(pageSize)
-    .select('-password');
+  return (
+    User.find({
+      //untuk mencari data di database
+      [dataSatuSearch]: { $regex: `\\b${dataDuaSearch}\\b`, $options: 'i' },
+    })
+      //untuk sorting
+      .sort({ [dataSatuSort]: ascdesc })
+      //untuk pagination
+      .skip(awal)
+      .limit(pageSize)
+      //password tidak perlu ditampilkan untuk privacy dan security
+      .select('-password')
+  );
 }
 
 /**

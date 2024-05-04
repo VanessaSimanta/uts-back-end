@@ -1,6 +1,17 @@
 const { errorResponder, errorTypes } = require('../../../core/errors');
 const authenticationServices = require('./authentication-service');
 
+//inisialisasi variabel
+let counterLoginAttempt = 0;
+
+/** mengreset counter kembali ke 0
+ * @returns {integer}
+ */
+function resetCounter() {
+  counterLoginAttempt = 0;
+  return counterLoginAttempt;
+}
+
 /**
  * Handle login request
  * @param {object} request - Express request object
@@ -8,18 +19,9 @@ const authenticationServices = require('./authentication-service');
  * @param {object} next - Express route middlewares
  * @returns {object} Response object or pass an error to the next route
  */
-
-//inisialisasi variabel
-let counterLoginAttempt = 0;
-
-function resetCounter() {
-  counterLoginAttempt = 0;
-  return counterLoginAttempt;
-}
-
 async function login(request, response, next) {
   const { email, password } = request.body;
-  const delayTime = 1800000;
+  const delayTime = 1800000; //waktu timeout 30 menit
 
   try {
     // Check login credentials
@@ -30,7 +32,7 @@ async function login(request, response, next) {
 
     //jika login attempt lebih dari 5x maka timeout dan error
     if (counterLoginAttempt == 5) {
-      setTimeout(resetCounter, delayTime);
+      setTimeout(resetCounter, delayTime); //setelah timeout selesai maka akan reset counter
       throw errorResponder(
         errorTypes.FORBIDDEN,
         'Too many failed login attempts'
@@ -38,6 +40,7 @@ async function login(request, response, next) {
     }
 
     if (!loginSuccess) {
+      //agar dapat mengetahui berapa kali login gagal
       counterLoginAttempt += 1;
       throw errorResponder(
         errorTypes.INVALID_CREDENTIALS,

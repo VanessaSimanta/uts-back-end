@@ -1,21 +1,24 @@
 const usersRepository = require('./users-repository');
 const { hashPassword, passwordMatched } = require('../../../utils/password');
-const { divide } = require('lodash');
 
 /**
  * Get list of users
+ * @param {integer} pageNumber - page keberapa
+ * @param {integer} pageSize - tiap page ada berapa data
+ * @param {String} searching - data yang ingin dicari di databasse
+ * @param {String} sorting - menentukan urutan data asc /desc
  * @returns {Array}
  */
 async function getUsers(pageNumber, pageSize, searching, sorting) {
+  //menampung data hasil pagination
   const hasilPagination = {};
   const batasAwal = (pageNumber - 1) * pageSize;
   const batasAkhir = pageNumber * pageSize;
   const apaAja = await usersRepository.TotalData();
   const Count = apaAja.length;
-  let itung = Math.ceil(Count / pageSize);
-  const semuaPages = itung;
+  const semuaPages = Math.ceil(Count / pageSize);
 
-  //menampilkan hasil
+  //memasukkan data hasil pagination ke array
   hasilPagination.page_number = {
     pageNumber,
   };
@@ -61,6 +64,7 @@ async function getUsers(pageNumber, pageSize, searching, sorting) {
     sorting
   );
 
+  //membuat output
   let hasilPalingAkhir = {
     'Page_number ': hasilPagination.page_number.pageNumber,
     'Page_size': hasilPagination.page_size.pageSize,
@@ -70,6 +74,7 @@ async function getUsers(pageNumber, pageSize, searching, sorting) {
     'Has_next_pages': hasilPagination.has_next_page.has_next_page,
     'Data': hasilPagination.data,
   };
+
   return hasilPalingAkhir;
 }
 

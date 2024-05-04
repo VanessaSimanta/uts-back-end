@@ -2,7 +2,7 @@ const usersService = require('./users-service');
 const { errorResponder, errorTypes } = require('../../../core/errors');
 
 /**
- * Handle get list of users request
+ * Handle get list of users request with pagination and filtering
  * @param {object} request - Express request object
  * @param {object} response - Express response object
  * @param {object} next - Express route middlewares
@@ -10,10 +10,10 @@ const { errorResponder, errorTypes } = require('../../../core/errors');
  */
 async function getUsers(request, response, next) {
   try {
-    const pageNumber = parseInt(request.query.page_number) || 0;
+    const pageNumber = parseInt(request.query.page_number) || 0; //default jika ga parameter ga ada apa2
     const pageSize = parseInt(request.query.page_size);
     const searching = request.query.search;
-    const sorting = request.query.sort || 'email';
+    const sorting = request.query.sort || 'email'; //default jika ga parameter ga ada apa2
     const users = await usersService.getUsers(
       pageNumber,
       pageSize,
